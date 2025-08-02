@@ -2,7 +2,7 @@ class YtAutoDl < Formula
   desc "macOS YouTube downloader scripts (dlv and dla)"
   homepage "https://github.com/chaseungjoon/yt-auto-dl"
   url "https://github.com/chaseungjoon/yt-auto-dl/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "320ed6fdd7c8f6f09f7732e57d5a6a3f6952eff537f0e65c1c711c42611dd336"
+  sha256 "ee118efa3bfc7a74f134ac9dadecc734c5586df982c8ac8a3e3f98e50a226861"
   version "1.0.0"
 
   depends_on "yt-dlp"
