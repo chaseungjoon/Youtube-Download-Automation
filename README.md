@@ -23,6 +23,11 @@ pip install ffpb
    - Run `dlv` to download the video as a `.mp4`
    - Run `dla` to download the audio as a `.mp3`
 
+```
+dlv
+dla
+```
+
 ## Features
 
 - **Automatically grabs Youtube URL** from your active browser tab
