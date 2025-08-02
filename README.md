@@ -16,6 +16,29 @@ Lightweight Zsh scripts that download the **currently open YouTube video in Goog
 
 ---
 
+## How to Run
+
+1) Download files into `~/bin`
+
+1) Install Dependencies
+```
+brew install yt-dlp ffmpeg
+pip install ffpb
+```
+
+2) Set the scripts as executables
+```
+chmod +x ~/bin/dlv ~/bin/dla
+```
+
+3) Run the command while having youtube open on chrome
+```
+dla
+```
+```
+dlv
+```
+
 ## 📦 Requirements
 
 - macOS (AppleScript required)
