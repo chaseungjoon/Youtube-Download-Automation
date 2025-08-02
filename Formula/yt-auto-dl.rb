@@ -7,13 +7,6 @@ class YtAutoDl < Formula
   depends_on "ffmpeg"
   depends_on "yt-dlp"
 
-  def caveats
-    <<~EOS
-      For video re-encoding, you must install ffpb:
-        pip install ffpb
-    EOS
-  end
-
   def install
     bin.install "dlv"
     bin.install "dla"
