@@ -1,0 +1,24 @@
+#!/bin/zsh
+
+URL=$(osascript -e 'tell application "Google Chrome" to get URL of active tab of front window')
+
+if [[ -z "$URL" || "$URL" != https://www.youtube.com/watch* ]]; then
+  echo "❌ Not a valid YouTube video URL: $URL"
+  exit 1
+fi
+
+echo "🎧 Downloading from >> $URL"
+
+yt-dlp \
+  --extract-audio \
+  --audio-format mp3 \
+  --audio-quality 320K \
+  --no-warnings \
+  --quiet \
+  --progress \
+  -o "$HOME/Downloads/%(title)s.%(ext)s" \
+  "$URL"
+
+LAST_FILE=$(ls -t ~/Downloads/*.mp3 | head -n 1)
+echo "📂 Saved as $LAST_FILE"
+open -R "$LAST_FILE"
