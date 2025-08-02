@@ -2,21 +2,21 @@
 
 Zsh scripts that download the **current open Youtube video**, either as a **video** (`dlv`) or **audio** (`dla`), without needing to manually copy & paste the URL.
 
-> ⚠️ These scripts are designed specifically for **MacOS**, as they rely on AppleScript to communicate with the browser(Chrome by default, you can change it at line 3).
+> ⚠️ These scripts are designed specifically for **MacOS**, as they rely on AppleScript to communicate with the browser.
 
 
 ## Features
 
-- **Auto-grabs Youtube URL** from your active browser tab
-- `dlv`: Downloads the video in the **highest QuickTime Player compatible quality**  
-  - Up to **1080p** in H.264  
-  - Re-encodes to H.264 automatically for 1440p and higher
-- `dla`: Downloads the video as **high-quality MP3 audio**
+- **Automatically grabs Youtube URL** from your active browser tab
+> `dla`: Downloads the video as **high-quality MP3 audio**
+
+> `dlv`: Downloads the video in the **highest QuickTime Player compatible quality**  
+>  - Automatically re-encodes to H.264 for 1440p and higher
 
 
 ## How to Use
 
-### 1) Download files into `$HOME/bin`
+### 1) Download script files into `$HOME/bin`
 
 ### 2) Install Dependencies
 ```
@@ -42,6 +42,6 @@ chmod +x ~/bin/dlv ~/bin/dla
 - macOS (AppleScript required)
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`brew install yt-dlp`)
 - [ffmpeg](https://ffmpeg.org/) (`brew install ffmpeg`)
-- [`ffpb`](https://github.com/althonos/ffpb) (`pip install ffpb`)
+- [ffpb](https://github.com/althonos/ffpb) (`pip install ffpb`)
 
 
