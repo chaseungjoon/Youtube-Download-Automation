@@ -10,7 +10,7 @@ Zsh scripts that download the **current open Youtube video**, either as a **vide
 - **Automatically grabs Youtube URL** from your active browser tab
 > `dla`: Downloads the video as **high-quality(320K) MP3 audio**
 
-> `dlv`: Downloads the video in the **highest QuickTime Player compatible quality**  
+> `dlv`: Downloads the video in the **highest quality (QuickTime Player compatible)**  
 >  - Automatically re-encodes to H.264 for 1440p and higher
 
 
