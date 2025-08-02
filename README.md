@@ -13,9 +13,6 @@ Lightweight Zsh scripts that download the **currently open YouTube video in Goog
   - Up to **1080p** in H.264  
   - Re-encodes to H.264 automatically for 1440p and higher
 - `dla`: Downloads the video as **high-quality MP3 audio**
-- **Automatically names** the output file based on the video title
-- **Opens the file in Finder** when done
-- Minimal terminal output with a clean progress bar (via [`ffpb`](https://github.com/althonos/ffpb))
 
 ---
 
