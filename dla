@@ -47,8 +47,6 @@ if [[ -z "$URL" ]]; then
   exit 1
 fi
 
-echo "🎬 Downloading from >> $URL"
-
 echo "🎧 Downloading from >> $URL"
 
 yt-dlp \
