@@ -1,0 +1,67 @@
+#!/bin/zsh
+
+get_youtube_url() {
+  local browsers=("Google Chrome" "Brave Browser" "Microsoft Edge" "Arc" "Safari" "Orion" "Zen")
+  local frontApp URL is_running
+
+  frontApp=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null)
+
+  if [[ " ${browsers[*]} " =~ " ${frontApp} " ]]; then
+    is_running=$(osascript -e "application \"$frontApp\" is running" 2>/dev/null)
+    if [[ "$is_running" == "true" ]]; then
+      if [[ "$frontApp" == "Safari" || "$frontApp" == "Orion" ]]; then
+        URL=$(osascript -e "tell application \"$frontApp\" to get URL of current tab of front window" 2>/dev/null)
+      else
+        URL=$(osascript -e "tell application \"$frontApp\" to get URL of active tab of front window" 2>/dev/null)
+      fi
+      if [[ "$URL" == https://www.youtube.com/watch* ]]; then
+        echo "$URL"
+        return
+      fi
+    fi
+  fi
+
+  for browser in "${browsers[@]}"; do
+    [[ "$browser" == "$frontApp" ]] && continue
+    is_running=$(osascript -e "application \"$browser\" is running" 2>/dev/null)
+    if [[ "$is_running" == "true" ]]; then
+      if [[ "$browser" == "Safari" || "$browser" == "Orion" ]]; then
+        URL=$(osascript -e "tell application \"$browser\" to get URL of current tab of front window" 2>/dev/null)
+      else
+        URL=$(osascript -e "tell application \"$browser\" to get URL of active tab of front window" 2>/dev/null)
+      fi
+      if [[ "$URL" == https://www.youtube.com/watch* ]]; then
+        echo "$URL"
+        return
+      fi
+    fi
+  done
+
+  echo ""
+}
+
+URL=$(get_youtube_url)
+
+if [[ -z "$URL" ]]; then
+  echo "❌ No valid YouTube video URL found in any supported browser."
+  exit 1
+fi
+
+echo "🎬 Downloading from >> $URL"
+
+echo "🎧 Downloading from >> $URL"
+
+yt-dlp \
+  --extract-audio \
+  --audio-format mp3 \
+  --audio-quality 320K \
+  --no-warnings \
+  --quiet \
+  --no-playlist \
+  --progress \
+  -o "$HOME/Downloads/%(title)s.%(ext)s" \
+  "$URL"
+
+LAST_FILE=$(ls -t ~/Downloads/*.mp3 | head -n 1)
+echo "📂 Saved as $LAST_FILE"
+open -R "$LAST_FILE"

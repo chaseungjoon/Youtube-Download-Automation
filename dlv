@@ -1,0 +1,103 @@
+#!/bin/zsh
+
+get_youtube_url() {
+  local browsers=("Google Chrome" "Brave Browser" "Microsoft Edge" "Arc" "Safari" "Orion" "Zen")
+  local frontApp URL is_running
+
+  frontApp=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null)
+
+  if [[ " ${browsers[*]} " =~ " ${frontApp} " ]]; then
+    is_running=$(osascript -e "application \"$frontApp\" is running" 2>/dev/null)
+    if [[ "$is_running" == "true" ]]; then
+      if [[ "$frontApp" == "Safari" || "$frontApp" == "Orion" ]]; then
+        URL=$(osascript -e "tell application \"$frontApp\" to get URL of current tab of front window" 2>/dev/null)
+      else
+        URL=$(osascript -e "tell application \"$frontApp\" to get URL of active tab of front window" 2>/dev/null)
+      fi
+      if [[ "$URL" == https://www.youtube.com/watch* ]]; then
+        echo "$URL"
+        return
+      fi
+    fi
+  fi
+
+  for browser in "${browsers[@]}"; do
+    [[ "$browser" == "$frontApp" ]] && continue
+    is_running=$(osascript -e "application \"$browser\" is running" 2>/dev/null)
+    if [[ "$is_running" == "true" ]]; then
+      if [[ "$browser" == "Safari" || "$browser" == "Orion" ]]; then
+        URL=$(osascript -e "tell application \"$browser\" to get URL of current tab of front window" 2>/dev/null)
+      else
+        URL=$(osascript -e "tell application \"$browser\" to get URL of active tab of front window" 2>/dev/null)
+      fi
+      if [[ "$URL" == https://www.youtube.com/watch* ]]; then
+        echo "$URL"
+        return
+      fi
+    fi
+  done
+
+  echo ""
+}
+
+URL=$(get_youtube_url)
+URL=$(echo "$URL" | sed 's/&.*//')
+
+if [[ -z "$URL" ]]; then
+  echo "❌ No valid YouTube video URL found in any supported browser."
+  exit 1
+fi
+
+echo "🎬 Downloading from >> $URL"
+
+FORMAT_INFO=$(yt-dlp -F "$URL")
+BEST_HEIGHT=$(echo "$FORMAT_INFO" | grep -E '^[0-9]+.*video' | grep -Eo '[0-9]{3,4}x[0-9]{3,4}' | awk -Fx '{print $2}' | sort -nr | head -n1)
+
+TITLE=$(yt-dlp --get-title "$URL" | tr -d '\n' | sed 's/[\/:*?"<>|]/_/g')
+OUT_TPL="$HOME/Downloads/${TITLE}.%(ext)s"
+TEMP_RAW_PATH="$HOME/Downloads/temp_raw_video"
+FINAL_PATH="$HOME/Downloads/${TITLE}.mp4"
+
+if [[ "$BEST_HEIGHT" -le 1080 ]]; then
+  echo "📥 1080p or lower detected. Downloading directly..."
+
+  yt-dlp \
+    -f "bestvideo[ext=mp4][vcodec*=avc]+bestaudio[ext=m4a]/best[ext=mp4]" \
+    --merge-output-format mp4 \
+    --no-playlist \
+    --no-warnings \
+    --quiet \
+    --progress \
+    -o "$OUT_TPL" \
+    "$URL"
+
+  FINAL_PATH=$(ls -t ~/Downloads/*.mp4 | grep -i "$TITLE" | head -n 1)
+  [[ ! -f "$FINAL_PATH" ]] && FINAL_PATH=$(ls -t ~/Downloads/*.mp4 | head -n 1)
+
+else
+  echo "📥 $BEST_HEIGHT detected. Downloading & re-encoding for QuickTime..."
+
+  yt-dlp \
+    -f "bv*+ba/b" \
+    --merge-output-format mp4 \
+    --no-playlist \
+    --no-warnings \
+    --quiet \
+    --progress \
+    -o "$TEMP_RAW_PATH.%(ext)s" \
+    "$URL"
+
+  RAW_FILE=$(ls -t ~/Downloads/temp_raw_video.* | head -n 1)
+  [[ ! -f "$RAW_FILE" ]] && { echo "❌ Failed to find downloaded file."; exit 1; }
+
+  echo "🎞️ Re-encoding to H.264..."
+  ffpb -i "$RAW_FILE" -c:v libx264 -c:a aac -movflags +faststart "$FINAL_PATH" -y < /dev/null
+  rm "$RAW_FILE"
+fi
+
+if [[ -f "$FINAL_PATH" ]]; then
+  echo "📂 Saved as $FINAL_PATH"
+  open -R "$FINAL_PATH"
+else
+  echo "❌ File not found after download."
+fi
