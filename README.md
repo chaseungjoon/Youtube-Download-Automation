@@ -1,13 +1,13 @@
 # `dlv` / `dla` – Youtube Download Scripts for MacOS
 
-Zsh scripts that download the **currently open YouTube video in Google Chrome**, either as a **video** (`dlv`) or **audio** (`dla`), without needing to manually copy & paste the URL.
+Zsh scripts that download the **current open Youtube video**, either as a **video** (`dlv`) or **audio** (`dla`), without needing to manually copy & paste the URL.
 
-> ⚠️ These scripts are designed specifically for **MacOS**, as they rely on AppleScript to communicate with Chrome.
+> ⚠️ These scripts are designed specifically for **MacOS**, as they rely on AppleScript to communicate with the browser(Chrome by default, you can change it at line 3).
 
 
 ## Features
 
-- **Auto-grabs YouTube URL** from your active Chrome tab
+- **Auto-grabs Youtube URL** from your active browser tab
 - `dlv`: Downloads the video in the **highest QuickTime Player compatible quality**  
   - Up to **1080p** in H.264  
   - Re-encodes to H.264 automatically for 1440p and higher
@@ -31,7 +31,7 @@ chmod +x ~/bin/dlv ~/bin/dla
 
 ### 4) Usage
 
-1. Open a Youtube video in **Chrome**
+1. Open a Youtube video in your browser
 2. In Terminal:
 
    - Run `dlv` to download the video as a `.mp4`
