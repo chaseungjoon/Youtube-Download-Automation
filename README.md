@@ -40,8 +40,8 @@ dla
 ## Requirements
 
 - macOS (AppleScript required)
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`brew install yt-dlp`)
-- [ffmpeg](https://ffmpeg.org/) (`brew install ffmpeg`)
-- [ffpb](https://github.com/althonos/ffpb) (`pip install ffpb`)
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- [ffmpeg](https://ffmpeg.org/)
+- [ffpb](https://github.com/althonos/ffpb)
 
 
