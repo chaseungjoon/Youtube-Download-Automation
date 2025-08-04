@@ -39,7 +39,7 @@ dla
 
 ## Requirements
 
-- macOS (AppleScript required)
+- MacOS
 - [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 - [ffmpeg](https://ffmpeg.org/)
 - [ffpb](https://github.com/althonos/ffpb)
